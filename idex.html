@@ -314,46 +314,51 @@ button:hover{
 }
 
 li{
+    cursor:pointer;
     position:relative;
-    cursor:help;
 }
 
-/* kleines Info-Feld */
-li::after{
-    content:attr(data-fact);
+
+/* Fact Box */
+.fact-box{
     position:absolute;
 
+    top:110%;
     left:0;
-    top:120%;
-
-    width:max-content;
-    max-width:300px;
 
     background:#0f172a;
     color:white;
 
-    padding:8px 12px;
+    padding:10px 14px;
 
     border-radius:10px;
 
     font-size:0.9rem;
 
+    max-width:280px;
+
     box-shadow:0 10px 30px rgba(0,0,0,.4);
 
     opacity:0;
-    transform:translateY(-5px);
-
-    pointer-events:none;
+    transform:translateY(-6px);
 
     transition:0.25s ease;
 
     z-index:9999;
+
+    pointer-events:none;
 }
 
-/* nur beim Hover sichtbar */
-li:hover::after{
+.fact-box.show{
     opacity:1;
     transform:translateY(0);
+}
+
+/* Icon Highlight beim aktiven Fact */
+.icon.active{
+    transform:scale(1.3);
+    filter:drop-shadow(0 0 10px #38bdf8);
+    transition:0.3s;
 }
 
 </style>
@@ -398,9 +403,6 @@ li:hover::after{
             <div class="icon">❓</div>
             <h1>Warum?</h1>
             <ul>
-                <!-- <li>Langsame Seiten verlieren Nutzer</li>
-                <li>Höhere Absprungrate</li>
-                <li>Schlechtere Conversion</li> -->
                 <li data-fact="Google zeigt: 1s langsamer = bis zu 20% weniger Conversion">
                     Langsame Seiten verlieren Nutzer
                 </li>
@@ -420,10 +422,6 @@ li:hover::after{
             <div class="icon performance">⚡</div>
             <h1>Performance</h1>
             <ul>
-                <!-- <li>Bilder komprimieren (WebP)</li>
-                <li>Lazy Loading</li>
-                <li>Minify CSS & JS</li>
-                <li>Caching nutzen</li> -->
                 <li data-fact="WebP reduziert Bildgröße um bis zu 30% gegenüber JPG">
                     Bilder komprimieren (WebP)
                 </li>
@@ -447,9 +445,6 @@ li:hover::after{
             <div class="icon ux">🎨</div>
             <h1>UX Design</h1>
             <ul>
-                <!-- <li>Klare Navigation</li>
-                <li>Responsive Design</li>
-                <li>Lesbare Inhalte</li> -->
                 <li data-fact="Gute UX reduziert kognitive Belastung des Nutzers">
                     Klare Navigation
                 </li>
@@ -469,9 +464,6 @@ li:hover::after{
             <div class="icon seo">🔍</div>
             <h1>SEO</h1>
             <ul>
-                <!-- <li>Meta Tags</li>
-                <li>Semantisches HTML</li>
-                <li>Schnelle Ladezeit</li> -->
                 <li data-fact="Meta Tags helfen Google Inhalte richtig einzuordnen">
                     Meta Tags
                 </li>
@@ -641,6 +633,78 @@ window.addEventListener("resize", () => {
 });
 
 goTo(0);
+
+let activeFact = null;
+
+document.querySelectorAll("li").forEach(li => {
+
+    li.addEventListener("click", (e) => {
+
+        e.stopPropagation();
+
+        playClickSound();
+
+        // alte Fact Box entfernen
+        document.querySelectorAll(".fact-box")
+            .forEach(b => b.remove());
+
+        document.querySelectorAll(".icon")
+            .forEach(i => i.classList.remove("active"));
+
+        const fact = li.dataset.fact;
+
+        // neue Fact Box erstellen
+        const box = document.createElement("div");
+        box.className = "fact-box";
+        box.textContent = fact;
+
+        li.appendChild(box);
+
+        requestAnimationFrame(() => {
+            box.classList.add("show");
+        });
+
+        // Icon der aktuellen Section aktivieren
+        const slide = li.closest(".slide");
+
+        const icon = slide.querySelector(".icon");
+        if(icon){
+            icon.classList.add("active");
+        }
+
+        activeFact = box;
+    });
+});
+
+// Klick irgendwo anders schließt Facts
+document.addEventListener("click", () => {
+
+    document.querySelectorAll(".fact-box")
+        .forEach(b => b.remove());
+
+    document.querySelectorAll(".icon")
+        .forEach(i => i.classList.remove("active"));
+});
+
+function playClickSound(){
+
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+const osc = ctx.createOscillator();
+const gain = ctx.createGain();
+
+osc.type = "sine";
+osc.frequency.setValueAtTime(700, ctx.currentTime);
+
+gain.gain.setValueAtTime(0.05, ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
+
+osc.connect(gain);
+gain.connect(ctx.destination);
+
+osc.start();
+osc.stop(ctx.currentTime + 0.2);
+}
 
 </script>
 
