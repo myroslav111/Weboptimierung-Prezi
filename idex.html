@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Weboptimierung Prezi</title>
+
+<style>
+
+:root{
+    --bg:#0b1220;
+    --card:rgba(30,41,59,.85);
+    --accent:#38bdf8;
+    --text:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    font-family:system-ui, sans-serif;
+    background:radial-gradient(circle at top, #1e293b, #020617);
+    color:var(--text);
+}
+
+/* VIEWPORT */
+#viewport{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+/* WORLD / CANVAS */
+#canvas{
+    position:absolute;
+    width:6000px;
+    height:4000px;
+    transform-origin:0 0;
+    will-change:transform;
+}
+
+/* CARD */
+.slide{
+    position:absolute;
+    width:min(600px, 80vw);
+    min-height:300px;
+
+    padding:40px;
+
+    border-radius:28px;
+
+    background:var(--card);
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.slide.active{
+    outline:3px solid var(--accent);
+    transform:scale(1.02);
+}
+
+/* ICON */
+.icon{
+    font-size:clamp(3rem, 6vw, 5rem);
+    margin-bottom:15px;
+}
+
+/* TEXT */
+h1{
+    font-size:clamp(1.8rem, 3vw, 2.6rem);
+    margin-bottom:15px;
+}
+
+p, li{
+    font-size:clamp(1rem, 2vw, 1.2rem);
+    line-height:1.6;
+}
+
+ul{
+    margin-left:20px;
+}
+
+/* NAV */
+.nav{
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    z-index:1000;
+}
+
+button{
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    background:#1e293b;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#334155;
+}
+
+/* PROGRESS */
+.progress{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:5px;
+    background:#0f172a;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:var(--accent);
+    transition:0.6s;
+}
+
+.icon.performance{
+    animation: pulseFlash 1.2s infinite ease-in-out;
+    display:inline-block;
+}
+
+@keyframes pulseFlash{
+    0%{
+        transform:scale(1);
+        filter:brightness(1);
+    }
+    50%{
+        transform:scale(1.2);
+        filter:brightness(1.8);
+    }
+    100%{
+        transform:scale(1);
+        filter:brightness(1);
+    }
+}
+
+.icon.ux{
+    animation: floatUX 3s ease-in-out infinite;
+    display:inline-block;
+}
+
+@keyframes floatUX{
+    0%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-10px);
+    }
+    100%{
+        transform:translateY(0);
+    }
+}
+
+.icon.seo{
+    animation: searchScan 2s infinite ease-in-out;
+    display:inline-block;
+}
+
+@keyframes searchScan{
+    0%{
+        transform:scale(1) rotate(0deg);
+        filter:opacity(1);
+    }
+    50%{
+        transform:scale(1.15) rotate(10deg);
+        filter:opacity(.6);
+    }
+    100%{
+        transform:scale(1) rotate(0deg);
+        filter:opacity(1);
+    }
+}
+
+.icon.start{
+    animation: globeSpin 6s linear infinite;
+    display:inline-block;
+}
+
+@keyframes globeSpin{
+    0%{
+        transform:rotate(0deg);
+    }
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+.icon.fazit{
+    animation: glow 2.5s ease-in-out infinite;
+    display:inline-block;
+}
+
+@keyframes glow{
+    0%{
+        text-shadow:0 0 0px #38bdf8;
+        transform:scale(1);
+    }
+    50%{
+        text-shadow:0 0 20px #38bdf8;
+        transform:scale(1.1);
+    }
+    100%{
+        text-shadow:0 0 0px #38bdf8;
+        transform:scale(1);
+    }
+}
+
+.slide{
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+#intro{
+    position:fixed;
+    inset:0;
+    background:black;
+    overflow:hidden;
+    z-index:9999;
+}
+
+/* Sterne */
+.stars{
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:
+        radial-gradient(white 1px, transparent 1px);
+    background-size:50px 50px;
+    animation:moveStars 8s linear infinite;
+    opacity:.4;
+}
+
+@keyframes moveStars{
+    from{
+        transform:translate(0,0);
+    }
+    to{
+        transform:translate(-200px,200px);
+    }
+}
+
+/* Erde */
+.earth{
+    position:absolute;
+    width:200px;
+    height:200px;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(circle at 30% 30%, #3b82f6, #0f172a);
+
+    box-shadow:0 0 80px #3b82f8;
+}
+
+/* Text */
+.intro-text{
+    position:absolute;
+    top:20%;
+    left:50%;
+    transform:translateX(-50%);
+
+    color:white;
+    font-size:2.5rem;
+    letter-spacing:3px;
+
+    animation:fadeIn 2s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+
+/* Skip Button */
+#skip{
+    position:absolute;
+    bottom:20px;
+    right:20px;
+
+    padding:10px 15px;
+    border:none;
+
+    background:#1e293b;
+    color:white;
+
+    border-radius:10px;
+    cursor:pointer;
+}
+
+li{
+    position:relative;
+    cursor:help;
+}
+
+/* kleines Info-Feld */
+li::after{
+    content:attr(data-fact);
+    position:absolute;
+
+    left:0;
+    top:120%;
+
+    width:max-content;
+    max-width:300px;
+
+    background:#0f172a;
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:10px;
+
+    font-size:0.9rem;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+
+    opacity:0;
+    transform:translateY(-5px);
+
+    pointer-events:none;
+
+    transition:0.25s ease;
+
+    z-index:9999;
+}
+
+/* nur beim Hover sichtbar */
+li:hover::after{
+    opacity:1;
+    transform:translateY(0);
+}
+
+</style>
+</head>
+
+<body>
+
+    <div id="intro">
+        <div class="stars"></div>
+    
+        <div class="earth"></div>
+    
+        <div class="intro-text">
+            Weboptimierung
+        </div>
+    
+        <button id="skip">Skip</button>
+    </div>
+
+<div class="nav">
+    <button onclick="goTo(0)">Start</button>
+    <button onclick="goTo(1)">Warum</button>
+    <button onclick="goTo(2)">Performance</button>
+    <button onclick="goTo(3)">UX</button>
+    <button onclick="goTo(4)">SEO</button>
+    <button onclick="goTo(5)">Fazit</button>
+</div>
+
+<div id="viewport">
+    <div id="canvas">
+
+        <!-- START -->
+        <section class="slide" style="left:2000px;top:1500px" data-scale="1.2">
+            <div class="icon start">🌐</div>
+            <h1>Weboptimierung</h1>
+            <p>Schneller, benutzerfreundlicher
+                und besser auffindbar.</p>
+        </section>
+
+        <!-- WARUM -->
+        <section class="slide" style="left:3200px;top:1500px" data-scale="1.5">
+            <div class="icon">❓</div>
+            <h1>Warum?</h1>
+            <ul>
+                <!-- <li>Langsame Seiten verlieren Nutzer</li>
+                <li>Höhere Absprungrate</li>
+                <li>Schlechtere Conversion</li> -->
+                <li data-fact="Google zeigt: 1s langsamer = bis zu 20% weniger Conversion">
+                    Langsame Seiten verlieren Nutzer
+                </li>
+                
+                <li data-fact="Über 50% der Nutzer verlassen Seiten nach 3 Sekunden Ladezeit">
+                    Höhere Absprungrate
+                </li>
+                
+                <li data-fact="Schlechter UX führt direkt zu weniger Verkäufen / Leads">
+                    Schlechtere Conversion
+                </li>
+            </ul>
+        </section>
+
+        <!-- PERFORMANCE -->
+        <section class="slide" style="left:4400px;top:1000px" data-scale="1.6">
+            <div class="icon performance">⚡</div>
+            <h1>Performance</h1>
+            <ul>
+                <!-- <li>Bilder komprimieren (WebP)</li>
+                <li>Lazy Loading</li>
+                <li>Minify CSS & JS</li>
+                <li>Caching nutzen</li> -->
+                <li data-fact="WebP reduziert Bildgröße um bis zu 30% gegenüber JPG">
+                    Bilder komprimieren (WebP)
+                </li>
+                
+                <li data-fact="Lazy Loading lädt Inhalte erst beim Scrollen → schnellere Initialzeit">
+                    Lazy Loading
+                </li>
+                
+                <li data-fact="Minify entfernt Leerzeichen & Kommentare im Code">
+                    Minify CSS & JS
+                </li>
+                
+                <li data-fact="Caching speichert Ressourcen lokal im Browser">
+                    Caching nutzen
+                </li>
+            </ul>
+        </section>
+
+        <!-- UX -->
+        <section class="slide" style="left:4400px;top:2200px" data-scale="1.6">
+            <div class="icon ux">🎨</div>
+            <h1>UX Design</h1>
+            <ul>
+                <!-- <li>Klare Navigation</li>
+                <li>Responsive Design</li>
+                <li>Lesbare Inhalte</li> -->
+                <li data-fact="Gute UX reduziert kognitive Belastung des Nutzers">
+                    Klare Navigation
+                </li>
+                
+                <li data-fact="Responsive Design = gleiche Seite auf allen Geräten">
+                    Responsive Design
+                </li>
+                
+                <li data-fact="Lesbare Inhalte erhöhen Verweildauer deutlich">
+                    Lesbare Inhalte
+                </li>
+            </ul>
+        </section>
+
+        <!-- SEO -->
+        <section class="slide" style="left:5600px;top:1500px" data-scale="1.6">
+            <div class="icon seo">🔍</div>
+            <h1>SEO</h1>
+            <ul>
+                <!-- <li>Meta Tags</li>
+                <li>Semantisches HTML</li>
+                <li>Schnelle Ladezeit</li> -->
+                <li data-fact="Meta Tags helfen Google Inhalte richtig einzuordnen">
+                    Meta Tags
+                </li>
+                
+                <li data-fact="Semantisches HTML verbessert Crawling durch Suchmaschinen">
+                    Semantisches HTML
+                </li>
+                
+                <li data-fact="Ladezeit ist offizieller Ranking-Faktor bei Google">
+                    Schnelle Ladezeit
+                </li>
+            </ul>
+        </section>
+
+        <!-- FAZIT -->
+        <section class="slide" style="left:6800px;top:1500px" data-scale="1.3">
+            <div class="icon fazit">🏁</div>
+            <h1>Fazit</h1>
+            <p>
+                Performance + UX + SEO = erfolgreiche Website
+            </p>
+        </section>
+
+    </div>
+</div>
+
+<div class="progress">
+    <div class="bar" id="bar"></div>
+</div>
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const slides = [...document.querySelectorAll(".slide")];
+const bar = document.getElementById("bar");
+
+const intro = document.getElementById("intro");
+const skip = document.getElementById("skip");
+
+function startIntro(){
+
+const earth = document.querySelector(".earth");
+
+let start = performance.now();
+
+function animate(t){
+
+    let p = (t - start) / 3000;
+
+    if(p > 1) p = 1;
+
+    // Zoom Effekt (Weltall → Erde → Prezi Welt)
+    const scale = 0.2 + p * 2.5;
+
+    const x = (window.innerWidth/2) * (1 - p);
+    const y = (window.innerHeight/2) * (1 - p);
+
+    intro.style.transform =
+        `scale(${1 + p*4})`;
+
+    intro.style.opacity =
+        1 - p;
+
+    if(p < 1){
+        requestAnimationFrame(animate);
+    } else {
+        intro.remove();
+        goTo(0); // deine Prezi startet
+    }
+}
+
+requestAnimationFrame(animate);
+}
+
+window.onload = startIntro;
+
+skip.onclick = () => {
+    intro.remove();
+    goTo(0);
+};
+
+let current = 0;
+
+const camera = {
+    x:0,
+    y:0,
+    scale:1
+};
+
+function update(){
+    canvas.style.transform =
+        `translate(${camera.x}px,${camera.y}px) scale(${camera.scale})`;
+}
+
+function animate(tx,ty,ts){
+
+    const sx = camera.x;
+    const sy = camera.y;
+    const ss = camera.scale;
+
+    const duration = 1000;
+    const start = performance.now();
+
+    function frame(t){
+
+        let p = (t - start) / duration;
+        if(p > 1) p = 1;
+
+        p = 1 - Math.pow(1 - p, 3);
+
+        camera.x = sx + (tx - sx) * p;
+        camera.y = sy + (ty - sy) * p;
+        camera.scale = ss + (ts - ss) * p;
+
+        update();
+
+        if(p < 1){
+            requestAnimationFrame(frame);
+        }
+    }
+
+    requestAnimationFrame(frame);
+}
+
+function goTo(i){
+
+    current = i;
+
+    slides.forEach(s => s.classList.remove("active"));
+    slides[i].classList.add("active");
+
+    const slide = slides[i];
+
+    const scale = parseFloat(slide.dataset.scale);
+
+    const x = slide.offsetLeft;
+    const y = slide.offsetTop;
+
+    const tx =
+        window.innerWidth/2 -
+        (x + slide.offsetWidth/2) * scale;
+
+    const ty =
+        window.innerHeight/2 -
+        (y + slide.offsetHeight/2) * scale;
+
+    animate(tx, ty, scale);
+
+    bar.style.width =
+        (i / (slides.length - 1)) * 100 + "%";
+}
+
+window.addEventListener("keydown", e => {
+
+    if(e.key === "ArrowRight"){
+        goTo(Math.min(current + 1, slides.length - 1));
+    }
+
+    if(e.key === "ArrowLeft"){
+        goTo(Math.max(current - 1, 0));
+    }
+
+});
+
+window.addEventListener("resize", () => {
+    goTo(current);
+});
+
+goTo(0);
+
+</script>
+
+</body>
+</html>
