@@ -323,7 +323,7 @@ li{
 .fact-box{
     position:absolute;
 
-    top:110%;
+    top:120%;
     left:0;
 
     background:#0f172a;
@@ -336,6 +336,7 @@ li{
     font-size:0.9rem;
 
     max-width:280px;
+    min-width:260px;
 
     box-shadow:0 10px 30px rgba(0,0,0,.4);
 
@@ -361,8 +362,65 @@ li{
     transition:0.3s;
 }
 
+
+.resource{
+    margin-top:20px;
+    padding:12px;
+    border-radius:12px;
+    background:rgba(56,189,248,.15);
+    border:1px solid rgba(56,189,248,.3);
+    font-size:.9rem;
+}
+
+.resource a{
+    color:#38bdf8;
+    text-decoration:none;
+}
+
+.resource a:hover{
+    text-decoration:underline;
+}
+
+#speakerNotes{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+
+    width:420px;
+    max-height:300px;
+
+    overflow:auto;
+
+    background:rgba(0,0,0,.92);
+
+    color:white;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    border:2px solid #38bdf8;
+
+    z-index:99999;
+
+    font-size:0.95rem;
+    line-height:1.6;
+
+    display:none;
+}
+
+#speakerNotes h3{
+    color:#38bdf8;
+    margin-bottom:10px;
+}
+
+#speakerNotes.visible{
+    display:block;
+}
+
 </style>
 </head>
+
 
 <body>
 
@@ -415,6 +473,13 @@ li{
                     Schlechtere Conversion
                 </li>
             </ul>
+
+            <div class="resource">
+                🔗 Demo:<br>
+                <a href="https://pagespeed.web.dev/" target="_blank">
+                    Google PageSpeed Insights
+                </a>
+            </div>
         </section>
 
         <!-- PERFORMANCE -->
@@ -438,6 +503,23 @@ li{
                     Caching nutzen
                 </li>
             </ul>
+
+            <div class="resource">
+                🔗 Ressourcen:<br>
+        
+                <a href="https://developers.google.com/speed/webp/gallery1"
+                   target="_blank">
+                   WebP Vergleich
+                </a>
+        
+                <br>
+        
+                <!-- <a href="https://gtmetrix.com/"
+                   target="_blank">
+                   GTMetrix
+                </a> -->
+        
+            </div>
         </section>
 
         <!-- UX -->
@@ -457,6 +539,17 @@ li{
                     Lesbare Inhalte
                 </li>
             </ul>
+
+
+    <div class="resource">
+        🔗 Demo:<br>
+
+        <a href="https://responsivedesignchecker.com/"
+           target="_blank">
+           Responsive Design Checker
+        </a>
+
+    </div>
         </section>
 
         <!-- SEO -->
@@ -476,14 +569,39 @@ li{
                     Schnelle Ladezeit
                 </li>
             </ul>
+
+
+    <div class="resource">
+        🔗 Ressourcen:<br>
+
+        <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+           target="_blank">
+           Google SEO Guide
+        </a>
+
+    </div>
         </section>
 
         <!-- FAZIT -->
         <section class="slide" style="left:6800px;top:1500px" data-scale="1.3">
             <div class="icon fazit">🏁</div>
             <h1>Fazit</h1>
-            <p>
-                Performance + UX + SEO = erfolgreiche Website
+            <p style="font-size:1.4rem">
+
+                ⚡ Performance<br><br>
+        
+                +<br><br>
+        
+                🎨 UX<br><br>
+        
+                +<br><br>
+        
+                🔍 SEO<br><br>
+        
+                =<br><br>
+        
+                🚀 Erfolgreiche Website
+        
             </p>
         </section>
 
@@ -492,6 +610,12 @@ li{
 
 <div class="progress">
     <div class="bar" id="bar"></div>
+</div>
+
+<div id="speakerNotes">
+
+    <div id="noteContent"></div>
+
 </div>
 
 <script>
@@ -614,6 +738,8 @@ function goTo(i){
 
     bar.style.width =
         (i / (slides.length - 1)) * 100 + "%";
+
+    updateNotes(i);
 }
 
 window.addEventListener("keydown", e => {
@@ -632,7 +758,6 @@ window.addEventListener("resize", () => {
     goTo(current);
 });
 
-goTo(0);
 
 let activeFact = null;
 
@@ -705,6 +830,162 @@ gain.connect(ctx.destination);
 osc.start();
 osc.stop(ctx.currentTime + 0.2);
 }
+
+const notes = [
+
+`
+<h3>🌐 Einleitung</h3>
+
+Kennt wahrscheinlich jeder:
+
+Man öffnet eine Webseite ...
+
+und wartet.
+
+Dann fragt man sich:
+
+"Lädt die Seite noch oder wurde sie mit Internet Explorer gebaut?" 😄
+
+Heute geht es darum,
+wie Webseiten schneller,
+benutzerfreundlicher
+und besser auffindbar werden.
+`,
+
+`
+<h3>❓ Warum Weboptimierung?</h3>
+
+Menschen erwarten heute
+praktisch sofortige Reaktionen.
+
+Wenn eine Webseite zu langsam ist,
+verlassen viele Nutzer die Seite.
+
+Langsame Webseiten bedeuten:
+
+• weniger Besucher
+
+• weniger Kunden
+
+• weniger Umsatz
+
+Eine langsame Webseite
+ist wie ein Verkäufer,
+der erst nach 30 Sekunden
+zur Tür kommt.
+`,
+
+`
+<h3>⚡ Performance</h3>
+
+Performance bedeutet:
+
+Wie schnell fühlt sich
+eine Webseite an?
+
+Bilder sind oft die größten Datenfresser.
+
+WebP spart Speicherplatz.
+
+Lazy Loading lädt Inhalte
+erst wenn sie benötigt werden.
+
+Caching merkt sich Daten
+für spätere Besuche.
+
+Die beste Datei
+ist oft die,
+die gar nicht geladen werden muss. 😄
+`,
+
+`
+<h3>🎨 UX Design</h3>
+
+Selbst die schnellste Webseite
+hilft nichts,
+
+wenn niemand versteht,
+wo er klicken soll.
+
+Gute Navigation spart Zeit.
+
+Responsive Design sorgt dafür,
+dass alles auf Handy,
+Tablet und Desktop funktioniert.
+
+Schlechte Navigation
+fühlt sich manchmal an wie IKEA. 😄
+`,
+
+`
+<h3>🔍 SEO</h3>
+
+SEO bedeutet:
+
+Google helfen,
+die Webseite zu verstehen.
+
+Eine Webseite ohne SEO
+ist wie ein Restaurant
+mitten im Wald.
+
+Vielleicht ist das Essen fantastisch.
+
+Aber niemand findet es.
+
+Meta Tags und semantisches HTML
+helfen Google dabei.
+`,
+
+`
+<h3>🏁 Fazit</h3>
+
+Wenn ihr euch nur
+eine Sache merkt:
+
+Performance
+
++
+
+UX
+
++
+
+SEO
+
+=
+
+Erfolgreiche Webseite.
+
+Eine Webseite muss:
+
+schnell sein,
+
+einfach nutzbar sein
+
+und gefunden werden können.
+
+Vielen Dank für eure Aufmerksamkeit.
+`
+];
+
+const noteBox =
+    document.getElementById("speakerNotes");
+
+const noteContent =
+    document.getElementById("noteContent");
+
+function updateNotes(index){
+    noteContent.innerHTML = notes[index];
+}
+
+document.addEventListener("keydown", e => {
+
+    if(e.key.toLowerCase() === "n"){
+        noteBox.classList.toggle("visible");
+    }
+
+});
 
 </script>
 
