@@ -418,6 +418,232 @@ li{
     display:block;
 }
 
+..start-animation{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:15px;
+}
+
+.start-animation span{
+    opacity:0;
+    transform:translateY(15px);
+    animation:wordCycle 8s infinite;
+    font-weight:600;
+}
+
+.start-animation span:nth-child(1){
+    animation-delay:0s;
+}
+
+.start-animation span:nth-child(2){
+    animation-delay:0.8s;
+}
+
+.start-animation span:nth-child(3){
+    animation-delay:1.6s;
+}
+
+@keyframes wordCycle{
+
+    /* Start leer */
+    0%{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    /* Wort erscheint */
+    8%{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+    /* bleibt sichtbar bis fast zum Ende */
+    72%{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+    /* alle verschwinden gleichzeitig */
+    80%{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+
+    /* warten bis neuer Zyklus */
+    100%{
+        opacity:0;
+    }
+}
+
+.final-animation{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    font-size:1.5rem;
+}
+
+.final-animation span{
+    opacity:0;
+    transform:translateY(25px);
+    animation:showFinal 7s forwards;
+}
+
+.final-animation span:nth-child(1){animation-delay:.2s;}
+.final-animation span:nth-child(2){animation-delay:.8s;}
+.final-animation span:nth-child(3){animation-delay:1.4s;}
+.final-animation span:nth-child(4){animation-delay:2.0s;}
+.final-animation span:nth-child(5){animation-delay:2.6s;}
+.final-animation span:nth-child(6){animation-delay:3.2s;}
+.final-animation span:nth-child(7){animation-delay:3.8s;}
+
+@keyframes showFinal{
+
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.rocket{
+
+    animation:
+        showFinal .8s forwards,
+        rocketGlow 1.5s infinite 4.5s;
+
+}
+
+@keyframes rocketGlow{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.08);
+        text-shadow:0 0 25px #38bdf8;
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+/* ===========================
+   OUTRO
+=========================== */
+
+#outro{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:#000;
+
+    overflow:hidden;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:2s;
+
+    z-index:999999999;
+}
+
+#outro.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.outro-earth{
+
+    width:220px;
+    height:220px;
+
+    animation:
+        earthFloat 6s ease-in-out infinite,
+        earthSpin 20s linear infinite;
+}
+
+.thanks{
+
+    position:absolute;
+
+    top:18%;
+
+    font-size:3rem;
+    font-weight:bold;
+
+    letter-spacing:4px;
+
+    opacity:0;
+
+    animation:thanksFade 2s forwards;
+    animation-delay:2s;
+}
+
+@keyframes earthFloat{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-20px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
+}
+
+@keyframes earthSpin{
+
+    from{
+        rotate:0deg;
+    }
+
+    to{
+        rotate:360deg;
+    }
+
+}
+
+@keyframes thanksFade{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-20px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
 </style>
 </head>
 
@@ -452,8 +678,13 @@ li{
         <section class="slide" style="left:2000px;top:1500px" data-scale="1.2">
             <div class="icon start">🌐</div>
             <h1>Weboptimierung</h1>
-            <p>Schneller, benutzerfreundlicher
-                und besser auffindbar.</p>
+            <!-- <p>Schneller, benutzerfreundlicher
+                und besser auffindbar.</p> -->
+                <p class="start-animation">
+                    <span>Schneller</span>
+                    <span>benutzerfreundlicher</span>
+                    <span>auffindbar.</span>
+                </p>
         </section>
 
         <!-- WARUM -->
@@ -586,23 +817,22 @@ li{
         <section class="slide" style="left:6800px;top:1500px" data-scale="1.3">
             <div class="icon fazit">🏁</div>
             <h1>Fazit</h1>
-            <p style="font-size:1.4rem">
+            <p class="final-animation">
 
-                ⚡ Performance<br><br>
-        
-                +<br><br>
-        
-                🎨 UX<br><br>
-        
-                +<br><br>
-        
-                🔍 SEO<br><br>
-        
-                =<br><br>
-        
-                🚀 Erfolgreiche Website
-        
+                <span>⚡ Performance</span>
+                <span>+</span>
+            
+                <span>🎨 UX</span>
+                <span>+</span>
+            
+                <span>🔍 SEO</span>
+                <span>=</span>
+            
+                <span class="rocket">🚀 Erfolgreiche Website</span>
+            
             </p>
+
+
         </section>
 
     </div>
@@ -618,6 +848,14 @@ li{
 
 </div>
 
+<div id="outro">
+    <div class="stars"></div>
+    <div class="earth outro-earth"></div>
+
+    <div class="thanks">
+        Vielen Dank! 🚀
+    </div>
+</div>
 <script>
 
 const canvas = document.getElementById("canvas");
@@ -740,6 +978,13 @@ function goTo(i){
         (i / (slides.length - 1)) * 100 + "%";
 
     updateNotes(i);
+
+    if(i === slides.length - 1){
+
+
+    setTimeout(startOutro, 7000);
+
+}
 }
 
 window.addEventListener("keydown", e => {
@@ -841,7 +1086,7 @@ Kennt wahrscheinlich jeder:
 Man öffnet eine Webseite ...
 
 und wartet.
-
+nnnnnnn
 Dann fragt man sich:
 
 "Lädt die Seite noch oder wurde sie mit Internet Explorer gebaut?" 😄
@@ -854,6 +1099,8 @@ und besser auffindbar werden.
 
 `
 <h3>❓ Warum Weboptimierung?</h3>
+Der absolute Hauptgrund, warum Weboptimierung (insbesondere Suchmaschinenoptimierung (SEO) und Performance-Optimierung) wichtig ist,
+ besteht darin, Besucher in Kunden oder treue Leser zu verwandeln, indem man ihnen genau das bietet, wonach sie suchen – und zwar schnell und problemlos.
 
 Menschen erwarten heute
 praktisch sofortige Reaktionen.
@@ -873,6 +1120,11 @@ Eine langsame Webseite
 ist wie ein Verkäufer,
 der erst nach 30 Sekunden
 zur Tür kommt.
+Klärung zum Demo-> </br>
+🔴 Performance (Leistung): Wert steht für die Geschwindigkeit der Webseite. </br>
+🟢 Accessibility (Barrierefreiheit):  Wert zeigt, wie einfach die Seite für Menschen mit Einschränkungen zu nutzen ist. </br>
+🟠 Best Practices (Gute Praktiken):  Wert prüft den technischen Zustand und die Sicherheit der Webseite. </br>
+🟠 SEO (Suchmaschinenoptimierung): Wert zeigt, wie gut Suchmaschinen wie Google die Seite verstehen können. </br>
 `,
 
 `
@@ -987,6 +1239,13 @@ document.addEventListener("keydown", e => {
 
 });
 
+function startOutro(){
+
+const outro = document.getElementById("outro");
+
+outro.classList.add("show");
+
+}
 </script>
 
 </body>
