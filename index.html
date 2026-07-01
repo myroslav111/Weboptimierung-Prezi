@@ -644,6 +644,26 @@ li{
 
 }
 
+.nav-btn{
+
+transition:all .35s ease;
+
+}
+
+.nav-btn.active{
+
+background:#38bdf8;
+
+color:white;
+
+transform:translateY(-3px) scale(1.08);
+
+box-shadow:
+    0 0 10px #38bdf8,
+    0 0 25px rgba(56,189,248,.6);
+
+}
+
 </style>
 </head>
 
@@ -662,13 +682,22 @@ li{
         <button id="skip">Skip</button>
     </div>
 
-<div class="nav">
+<!-- <div class="nav">
     <button onclick="goTo(0)">Start</button>
     <button onclick="goTo(1)">Warum</button>
     <button onclick="goTo(2)">Performance</button>
     <button onclick="goTo(3)">UX</button>
     <button onclick="goTo(4)">SEO</button>
     <button onclick="goTo(5)">Fazit</button>
+</div> -->
+
+<div class="nav">
+    <button class="nav-btn" onclick="goTo(0)">🌐 Start</button>
+    <button class="nav-btn" onclick="goTo(1)">❓ Warum</button>
+    <button class="nav-btn" onclick="goTo(2)">⚡ Performance</button>
+    <button class="nav-btn" onclick="goTo(3)">🎨 UX</button>
+    <button class="nav-btn" onclick="goTo(4)">🔍 SEO</button>
+    <button class="nav-btn" onclick="goTo(5)">🏁 Fazit</button>
 </div>
 
 <div id="viewport">
@@ -913,6 +942,7 @@ li{
 
 const canvas = document.getElementById("canvas");
 const slides = [...document.querySelectorAll(".slide")];
+const navButtons = [...document.querySelectorAll(".nav-btn")];
 const bar = document.getElementById("bar");
 
 const intro = document.getElementById("intro");
@@ -1009,6 +1039,9 @@ function goTo(i){
 
     slides.forEach(s => s.classList.remove("active"));
     slides[i].classList.add("active");
+
+    navButtons.forEach(btn => btn.classList.remove("active"));
+    navButtons[i].classList.add("active");
 
     const slide = slides[i];
 
